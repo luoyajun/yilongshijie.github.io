@@ -1,11 +1,82 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
-	<meta charset="utf-8" />
+    <meta charset="utf-8" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
 </head>
 <body>
-    hello world
+    <style type="text/css">
+        #TopologyPanelOuterLayer {
+            width: 600px;
+            height: 400px;
+            overflow: auto;
+        }
+
+            #TopologyPanelOuterLayer, #TopologyPanelOuterLayer * {
+                box-sizing: border-box;
+            }
+
+        #TopologyElement {
+            background: red;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+        }
+
+        #TopologyPanel {
+            width: 600px;
+            height: 400px;
+            border: 1px solid green;
+            overflow: hidden;
+            position: relative;
+        }
+    </style>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var TopologyElement = document.getElementById('TopologyElement');
+
+            var TopologyPanel = document.getElementById('TopologyPanel');
+            TopologyElement.onmousedown = function (mouseDownEvent) {
+
+                var self = this;
+                var OldSelfOffsetLeft = self.offsetLeft;
+                var OldSelfOffsetTop = self.offsetTop;
+                TopologyPanel.onmousemove = function (mouseMoveEvent) {
+                    var x = mouseMoveEvent.clientX - mouseDownEvent.clientX + OldSelfOffsetLeft
+                    var y = mouseMoveEvent.clientY - mouseDownEvent.clientY + OldSelfOffsetTop
+                    if (x < 0) x = 0;
+                    if (y < 0) y = 0;
+
+                    self.style.left = x + 'px';
+                    self.style.top = y + 'px';
+
+                    console.log(x + self.clientWidth)
+                    console.log(TopologyPanel.clientWidth)
+                    if (x + self.clientWidth > TopologyPanel.clientWidth) {
+                        TopologyPanel.style.width = (x + self.clientWidth) + 'px';
+                    }
+                    if (y + self.clientHeight > TopologyPanel.clientHeight) {
+                        TopologyPanel.style.height = (y + self.clientHeight) + 'px';
+                    }
+                }
+                document.onmouseup = function () {
+                    TopologyPanel.onmousemove = null;
+                    TopologyPanel.onmouseup = null;
+                }
+            }
+
+        }
+    </script>
+    <div id="TopologyPanelOuterLayer">
+
+        <div id="TopologyPanel">
+            <span id="TopologyElement"></span>
+        </div>
+
+    </div>
+
 </body>
 </html>
