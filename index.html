@@ -81,14 +81,16 @@
                         }
                     })
 
-                    document.onmouseup = function () {
-                        topology.panel.unbind("mousemove");
-                        topology.panel.unbind("mouseup");
-                    }
+                  
                 })
+                document.onmouseup = function () {
+                    topology.panel.unbind("mousemove");
+
+                }
 
 
             }
+
             topology.setData = function (data) {
 
                 for (index in data) {
