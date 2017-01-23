@@ -91,14 +91,17 @@
             }
             topology.setData = function (data) {
 
-                for (i in data) {
+                for (index in data) {
+                    var arrayData = data[index];
+                    for (i in arrayData) {
+                        topology.panel.append("<span class='TopologyElement " + i + "' data-name='" + arrayData[i].name + "' data-to='" + (arrayData[i].to ? arrayData[i].to : '') + "'></span>")
 
-                    topology.panel.append("<span class='TopologyElement " + i + "' data-name='" + arrayData[i].name + "' data-to='" + (arrayData[i].to ? arrayData[i].to : '') + "'></span>")
+                    }
                 }
 
             }
-     
-          
+
+
             return topology;
         })).initEvent();
     </script>
