@@ -25,7 +25,14 @@
             height: 3em;
             position: absolute;
         }
-          
+
+            .TopologyElement.jiedian1 {
+                background: yellow;
+            }
+
+            .TopologyElement.jiedian2 {
+                background: blue;
+            }
 
         #TopologyPanel {
             width: 100%;
@@ -35,50 +42,84 @@
             position: relative;
         }
     </style>
-
-    <script type="text/javascript">
-        window.onload = function () {
-
-            var TopologyPanel = document.getElementById('TopologyPanel');
-
-            $(TopologyPanel).on("mousedown", ".TopologyElement", function (mouseDownEvent) {
-            
-                console.log(this)
-                var self = this;
-                var OldSelfOffsetLeft = self.offsetLeft;
-                var OldSelfOffsetTop = self.offsetTop;
-                TopologyPanel.onmousemove = function (mouseMoveEvent) {
-                    var x = mouseMoveEvent.clientX - mouseDownEvent.clientX + OldSelfOffsetLeft
-                    var y = mouseMoveEvent.clientY - mouseDownEvent.clientY + OldSelfOffsetTop
-                    if (x < 0) x = 0;
-                    if (y < 0) y = 0;
-
-                    self.style.left = x + 'px';
-                    self.style.top = y + 'px';
-
-                    if (x + self.clientWidth > TopologyPanel.clientWidth) {
-                        TopologyPanel.style.width = (x + self.clientWidth) + 'px';
-                    }
-                    if (y + self.clientHeight > TopologyPanel.clientHeight) {
-                        TopologyPanel.style.height = (y + self.clientHeight) + 'px';
-                    }
-                }
-                document.onmouseup = function () {
-                    TopologyPanel.onmousemove = null;
-                    TopologyPanel.onmouseup = null;
-                }
-            })
-
-        }
-    </script>
     <div id="TopologyPanelOuterLayer">
 
         <div id="TopologyPanel">
-            <span class="TopologyElement"></span>
-            <span class="TopologyElement"></span>
+
         </div>
 
     </div>
 
+
+    <script type="text/javascript">
+
+        ((function (root, factory) {
+            return root["topology"] = factory();
+
+        })(this, function () {
+            var topology = { panel: $("#TopologyPanel") };
+            topology.initEvent = function () {
+                topology.panel.on("mousedown", ".TopologyElement", function (mouseDownEvent) {
+
+                    var self = this;
+                    var OldSelfOffsetLeft = self.offsetLeft;
+                    var OldSelfOffsetTop = self.offsetTop;
+                    topology.panel.on("mousemove", function (mouseMoveEvent) {
+                        var x = mouseMoveEvent.clientX - mouseDownEvent.clientX + OldSelfOffsetLeft
+                        var y = mouseMoveEvent.clientY - mouseDownEvent.clientY + OldSelfOffsetTop
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
+
+                        self.style.left = x + 'px';
+                        self.style.top = y + 'px';
+
+                        if (x + self.clientWidth > TopologyPanel.clientWidth) {
+                            TopologyPanel.style.width = (x + self.clientWidth) + 'px';
+                        }
+                        if (y + self.clientHeight > TopologyPanel.clientHeight) {
+                            TopologyPanel.style.height = (y + self.clientHeight) + 'px';
+                        }
+                    })
+
+                    document.onmouseup = function () {
+                        topology.panel.unbind("mousemove");
+                        topology.panel.unbind("mouseup");
+                    }
+                })
+
+
+            }
+            topology.setData = function (data) {
+     
+                for (i in data) {
+                    switch (i) {
+                        case 'jiedian1': topology.jiedian1(data[i]);break;
+                        case 'jiedian2': topology.jiedian2(data[i]);break;
+                    }
+                }
+       
+            }
+            topology.jiedian1 = function (arrayData) {
+                for (i in arrayData) {
+                    topology.panel.append("<span class='TopologyElement jiedian1' data-name='" + arrayData[i].name + "' data-to='" + arrayData[i].to + "'></span>")
+                }
+            }
+            topology.jiedian2 = function (arrayData) {
+                for (i in arrayData) {
+                    topology.panel.append("<span class='TopologyElement jiedian2' data-name='" + arrayData[i].name + "' data-to='" + arrayData[i].to + "'></span>")
+                }
+            }
+            topology.jiedian1To2 = function () {
+                    
+            }
+            return topology;
+        })).initEvent();
+    </script>
+    <script>
+        topology.setData({
+            jiedian1: [{ name: 'name1', to: ['name2'] }],
+            jiedian2: [{ name: 'name2' }]
+        })
+    </script>
 </body>
 </html>
