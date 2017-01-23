@@ -90,28 +90,15 @@
 
             }
             topology.setData = function (data) {
-     
+
                 for (i in data) {
-                    switch (i) {
-                        case 'jiedian1': topology.jiedian1(data[i]);break;
-                        case 'jiedian2': topology.jiedian2(data[i]);break;
-                    }
+
+                    topology.panel.append("<span class='TopologyElement " + i + "' data-name='" + arrayData[i].name + "' data-to='" + (arrayData[i].to ? arrayData[i].to : '') + "'></span>")
                 }
-       
+
             }
-            topology.jiedian1 = function (arrayData) {
-                for (i in arrayData) {
-                    topology.panel.append("<span class='TopologyElement jiedian1' data-name='" + arrayData[i].name + "' data-to='" + arrayData[i].to + "'></span>")
-                }
-            }
-            topology.jiedian2 = function (arrayData) {
-                for (i in arrayData) {
-                    topology.panel.append("<span class='TopologyElement jiedian2' data-name='" + arrayData[i].name + "' data-to='" + arrayData[i].to + "'></span>")
-                }
-            }
-            topology.jiedian1To2 = function () {
-                    
-            }
+     
+          
             return topology;
         })).initEvent();
     </script>
